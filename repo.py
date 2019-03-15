@@ -62,7 +62,7 @@ for i in get_repo_list_final:
         final_date = date(int(final_y), int(final_m), int(final_d))
        ###### print 'final_time: '+str(final_date)
        ##### print 'image_creation_time: '+str(image_date)
-        if image_date >= final_date:
+        if image_date <= final_date:
             print 'older -> date:' + str(image_date) + ', repo:'+docker_hub_username+'/'+ i + ', tag:' +value
             del_tag(docker_hub_username, i, value, token_list)
 
