@@ -7,8 +7,8 @@ import sys
 from urllib2 import urlopen, Request, HTTPError
 from urllib2 import build_opener, HTTPHandler
 
-docker_hub_username = 'dockerhub username'
-docker_hub_password = 'dockerhub password'
+docker_hub_username = 'karamchandchettepel'
+docker_hub_password = 'Trustn@123'
 
 def run_command(command):
     result = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
@@ -27,7 +27,6 @@ def del_tag(namespace, repo, tag, token_list):
         opener = build_opener(HTTPHandler)
         opener.open(request)
         print('%s/%s:%s deleted successfully.' % (namespace, repo, tag))
-        sys.exit(0)
     except HTTPError as err:
         print("Failed to delete tag %s, exiting." % err)
         sys.exit(1)
@@ -51,18 +50,19 @@ for i in get_repo_list_final:
         image_y, image_m, image_d = j.split('T')[0].split('-')
         image_creation_date = date(int(image_y), int(image_m), int(image_d))
         date_list.append(str(image_creation_date))
-    date_version_dict = dict(zip(date_list, image_tags_list))
-    for key, value in date_version_dict.iteritems():
+    date_version_list = zip(date_list, image_tags_list)
+    for dv in date_version_list:
+        key = dv[0]
+        value = dv[1]
         image_y, image_m, image_d = key.split('-')
         image_date = date(int(image_y), int(image_m), int(image_d))
         current_time = datetime.datetime.now()
         date_fnl = current_time + dateutil.relativedelta.relativedelta(days=-1) # days can be replaced by months
         final_y, final_m, final_d = str(date_fnl).split(' ')[0].split('-')
         final_date = date(int(final_y), int(final_m), int(final_d))
-        ###print final_date
-        ###print image_date
-        if image_date <= final_date:
+       ###### print 'final_time: '+str(final_date)
+       ##### print 'image_creation_time: '+str(image_date)
+        if image_date >= final_date:
             print 'older -> date:' + str(image_date) + ', repo:'+docker_hub_username+'/'+ i + ', tag:' +value
             del_tag(docker_hub_username, i, value, token_list)
-
 
